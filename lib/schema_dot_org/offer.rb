@@ -16,9 +16,9 @@ module SchemaDotOrg
 
     validates :priceCurrency,       type: String
     validates :price,               type: Numeric
-    validates :availability,        type: String, allow_nil: true
+    validates :availability,        type: String
     validates :url,                 type: String, allow_nil: true
-    validates :valid_from,          type: String, allow_nil: true
+    validates :valid_from,          type: Date
 
     def _to_json_struct
       {
