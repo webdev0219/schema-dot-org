@@ -11,12 +11,14 @@ module SchemaDotOrg
                   :price,
                   :availability,
                   :url,
-                  :category
+                  :category,
+                  :valid_from
 
     validates :priceCurrency,       type: String
     validates :price,               type: Numeric
     validates :availability,        type: String, allow_nil: true
     validates :url,                 type: String, allow_nil: true
+    validates :valid_from,          type: String, allow_nil: true
 
     def _to_json_struct
       {
@@ -24,7 +26,8 @@ module SchemaDotOrg
         "priceCurrency"     => priceCurrency,
         "availability"      => availability,
         "url"               => url,
-        "category"          => category
+        "category"          => category,
+        "validFrom"         => valid_from
       }
     end
   end
