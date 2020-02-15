@@ -5,7 +5,7 @@ require 'schema_dot_org/place'
 
 
 RSpec.describe SchemaDotOrg::Place do # rubocop:disable Metrics/BlockLength
-  let(:home) { SchemaDotOrg::Place.new(address: 'Las Vegas, NV') }
+  let(:home) { SchemaDotOrg::Place.new(name: 'Home', address: 'Las Vegas, NV') }
 
   describe "#new" do
     it 'will not create a Place without an address' do
@@ -13,13 +13,14 @@ RSpec.describe SchemaDotOrg::Place do # rubocop:disable Metrics/BlockLength
     end
 
     it 'creates a Place when given an address string' do
-      expect { SchemaDotOrg::Place.new(address: 'NY, NY') }
+      expect { SchemaDotOrg::Place.new(address: 'NY, NY', name: 'New York') }
     end
 
     it 'will not create a Place with an unknown attribute' do
       expect do
         Place.new(
           address: '12345 Happy Street',
+          name: 'Home'
           author:  'Hemmingway'
         )
       end.to raise_error(NoMethodError)
@@ -30,6 +31,7 @@ RSpec.describe SchemaDotOrg::Place do # rubocop:disable Metrics/BlockLength
     it "has exactly the correct attributes and values" do
       expect(home.to_json_struct).to eq(
         '@type' => 'Place',
+        'name' => 'Home'
         'address' => 'Las Vegas, NV'
       )
     end
@@ -37,19 +39,19 @@ RSpec.describe SchemaDotOrg::Place do # rubocop:disable Metrics/BlockLength
 
   describe "#to_json" do
     it "generates the expected string" do
-      expect(home.to_json).to eq '{"@type":"Place","address":"Las Vegas, NV"}'
+      expect(home.to_json).to eq '{"@type":"Place","address":"Las Vegas, NV", "name":"Home"}'
     end
   end
 
   describe "#to_json_ld" do
     it "generates the expected string" do
-      expect(home.to_json_ld).to eq "<script type=\"application/ld+json\">\n{\"@context\":\"http://schema.org\",\"@type\":\"Place\",\"address\":\"Las Vegas, NV\"}\n</script>"
+      expect(home.to_json_ld).to eq "<script type=\"application/ld+json\">\n{\"@context\":\"http://schema.org\",\"@type\":\"Place\",\"address\":\"Las Vegas, NV\",,\"name\":\"Home\"}\n</script>"
     end
   end
 
   describe "#to_s" do
     it "generates the same string as #to_json_ld(pretty: true)" do
-      expect(home.to_s).to eq "<script type=\"application/ld+json\">\n{\n  \"@context\": \"http://schema.org\",\n  \"@type\": \"Place\",\n  \"address\": \"Las Vegas, NV\"\n}\n</script>"
+      expect(home.to_s).to eq "<script type=\"application/ld+json\">\n{\n  \"@context\": \"http://schema.org\",\n  \"@type\": \"Place\",\n  \"address\": \"Las Vegas, NV\"\n,\n  \"name\": \"Home\"\n}\n</script>"
     end
   end
 end
